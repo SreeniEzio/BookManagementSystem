@@ -191,7 +191,7 @@ public class Fine extends javax.swing.JFrame {
             LocalDate today = LocalDate.now();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String date = today.format(dtf);
-            System.out.println(date);
+            //System.out.println(date);
             new FineBackend().addFine(customerId, fineAmt, date);
             JOptionPane.showMessageDialog(Fine.this, "Payment Successful");
         }
