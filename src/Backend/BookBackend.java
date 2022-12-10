@@ -5,6 +5,8 @@
 package Backend;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 /**
  *
@@ -107,7 +109,12 @@ public class BookBackend {
         try{
             conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
             Statement st = conn.createStatement();
-            st.execute("update bookCollection set borrowedBy=" + customerId + " where id=" + bookId + ";");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate dateToday = LocalDate.now();
+            LocalDate dueDate = dateToday.plusDays(20);
+            String due = dueDate.format(dtf);
+            //System.out.println("update bookCollection set borrowedBy=" + customerId + ",dueDate=\"" + due +"\" where id=" + bookId + ";");
+            st.execute("update bookCollection set borrowedBy=" + customerId + ",dueDate=\"" + due +"\" where id=" + bookId + ";");
             conn.close();
             st.close();
             return 1;
@@ -165,5 +172,29 @@ public class BookBackend {
         } 
     }
     
+    public void updateBorrow(int customerId){
+        ArrayList<Object[]> books = retrieveBorrowedBooks(customerId);
+        for(Object[] book: books){
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate dueDate = LocalDate.parse((String)book[5], dtf);
+            if(today.isAfter(dueDate)){
+                borrowBook((int)book[0], customerId);
+            }
+        }
+    }
     
+    public int updateBook(int bookId, String name, String author, String genre){
+        Connection conn = null;
+        try{
+            conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
+            Statement st = conn.createStatement();
+            String query = "update bookCollection set name=\"" + name + "\",author=\"" + author + "\",genre=\"" + genre + "\" where id=" + bookId + ";";
+            st.execute(query);
+            return 1;
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

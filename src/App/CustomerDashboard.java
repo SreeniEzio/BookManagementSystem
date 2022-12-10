@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -22,31 +23,37 @@ public class CustomerDashboard extends javax.swing.JFrame {
     String userName;
     DefaultTableModel model;
     ArrayList<Object[]> books;
-    int fine = 0;
+    //int fine = 0;
     public CustomerDashboard(String name) {;
         initComponents();
         userName = name;
         if(!name.isEmpty())
-        currentCustomer = new PasswordChecker().retrieveCustomer(userName).get(0);
+            currentCustomer = new PasswordChecker().retrieveCustomer(userName).get(0);
+        
+        currentCustomer.displayDebug();
         lblWelcome.setText("Welcome " + currentCustomer.getUserName().toUpperCase());
         model = (DefaultTableModel) tblBorrowedBooks.getModel();
         fillTable();
-        calculateGeneration();
-        txtFine.setText(fine+"");
+        //calculateGeneration();
+        txtFine.setText(currentCustomer.fine+"");
     }
     
-    private void calculateGeneration(){
+    /*private void calculateGeneration(){
         
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate dateToday = LocalDate.now();
         for(Object[] book : books){
             String dueDateString = (String) book[5];
-            LocalDate dueDate = LocalDate.parse(dueDateString, dtf);
-            long daysBetween = Period.between(dueDate, dateToday).getDays();
-            fine += daysBetween * 5;
+            if(dueDateString != null){
+                LocalDate dueDate = LocalDate.parse(dueDateString, dtf);
+                long daysBetween = Period.between(dueDate, dateToday).getDays();
+                if(daysBetween > 0)
+                    fine += daysBetween * 5;
+            }
         }
     }
-    
+    */
+  
     private void fillTable(){
         books = new BookBackend().retrieveBorrowedBooks(currentCustomer.customerId);
         for(Object[] book: books){
@@ -273,11 +280,19 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChangePassActionPerformed
 
     private void btnPayFineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayFineActionPerformed
-        new Fine(currentCustomer.customerId, fine).setVisible(true);
+        if(currentCustomer.fine == 0){
+            JOptionPane.showMessageDialog(CustomerDashboard.this, "No fine to pay");
+            return;
+        }
+        new Fine(currentCustomer.customerId, currentCustomer.fine).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnPayFineActionPerformed
 
     private void btnBorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrowActionPerformed
+        if(currentCustomer.fine > 0){
+            JOptionPane.showMessageDialog(CustomerDashboard.this, "You can't borrow books until you pay your fine");
+            return;
+        }
         new CustomerBorrow().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBorrowActionPerformed
@@ -287,6 +302,10 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_formMouseClicked
 
     private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
+        if(books.size() == 0){
+            JOptionPane.showMessageDialog(CustomerDashboard.this, "No book to return");
+            return;
+        }
         new CustomerReturn().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnReturnActionPerformed

@@ -19,21 +19,22 @@ public class PasswordChecker {
             conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
             Statement st = conn.createStatement();
             
-            rs = st.executeQuery("SELECT * FROM customer;");//implement using where keyword 
+            rs = st.executeQuery("SELECT * FROM customer where name=\"" + name +"\";");//implement using where keyword 
             //System.out.println("SELECT * FROM " + accountType + ";");
             //ArrayList<Customer> cust = new ArrayList<Customer>();
             if(rs == null)System.err.println(" rs is null");
         
             while(rs.next()){
                 String uname, pass, mob, email;
-                int id;
+                int id, fine;
                 id = rs.getInt(1);
                 uname = rs.getString(2);
                 pass = rs.getString(3);
                 mob = rs.getString(4);
                 email = rs.getString(5);
+                fine = rs.getInt("fine");
                 //System.out.println(id + "\t" + uname + "\t" + pass + "\t" + mob + "\t" + email);
-                cust.add(new Customer(id, uname, pass, mob, email));
+                cust.add(new Customer(id, uname, pass, mob, email, fine));
 
             }
         } catch (SQLException e) {

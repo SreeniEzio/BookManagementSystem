@@ -4,6 +4,9 @@
  */
 package Backend;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 /**
  *
@@ -47,6 +50,47 @@ public class FineBackend {
         }catch(SQLException e){
             e.printStackTrace();
             return 0;
+        }
+    }
+    
+    public void refreshFines(){
+        Connection conn = null;
+        try{
+            conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
+            Statement st = conn.createStatement();
+            
+            ResultSet rs = st.executeQuery("select id from customer;");
+            while(rs.next()){
+                int fine = 0;
+                int customerId = rs.getInt("id");
+                ArrayList<Object[]> books = new BookBackend().retrieveBorrowedBooks(customerId);
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate dateToday = LocalDate.now();
+                for(Object[] book : books){
+                    String dueDateString = (String) book[5];
+                    if(dueDateString != null){
+                        LocalDate dueDate = LocalDate.parse(dueDateString, dtf);
+                        long daysBetween = Period.between(dueDate, dateToday).getDays();
+                        if(daysBetween > 0)
+                            fine += daysBetween * 5;
+                    }
+                }
+                System.out.println("ID: "+customerId + " Fine: " + fine);
+                st.execute("update customer set fine=" + fine + " where id=" + customerId + ";");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void removeFine(int customerId){
+        Connection conn = null;
+        try{
+            conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
+            Statement st = conn.createStatement();
+            st.execute("update customer set fine=null where id=" + customerId + ";");
+        }catch(SQLException e){
+            e.printStackTrace();
         }
     }
 }

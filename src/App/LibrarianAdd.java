@@ -261,11 +261,15 @@ public class LibrarianAdd extends javax.swing.JFrame {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
       DefaultTableModel model=(DefaultTableModel)tblBooks.getModel();
       int SelectedRowIndex=tblBooks.getSelectedRow();
+      if(SelectedRowIndex == -1){
+            JOptionPane.showMessageDialog(LibrarianAdd.this, "Select a row to update");
+            return;
+      }
       try{
       
-      //String ID=model.getValueAt(SelectedRowIndex, 0).toString();
-        String Auth=model.getValueAt(SelectedRowIndex, 1).toString();
-        String Nam=model.getValueAt(SelectedRowIndex, 2).toString();
+        String ID=model.getValueAt(SelectedRowIndex, 0).toString();
+        String Nam=model.getValueAt(SelectedRowIndex, 1).toString();
+        String Auth=model.getValueAt(SelectedRowIndex, 2).toString();
         String Gen=model.getValueAt(SelectedRowIndex, 3).toString();
       
         String newName=JOptionPane.showInputDialog(null, "Enter the Name of Book",Nam);
@@ -273,10 +277,16 @@ public class LibrarianAdd extends javax.swing.JFrame {
         String newGenre=JOptionPane.showInputDialog(null, "Enter the Genre",Gen);
         
             
-            //model.setValueAt(newId,SelectedRowIndex,0);
-        model.setValueAt(newAuthor,SelectedRowIndex,1);
-        model.setValueAt(newName,SelectedRowIndex,2);
+        //model.setValueAt(newId,SelectedRowIndex,0);
+        model.setValueAt(newName,SelectedRowIndex,1);
+        model.setValueAt(newAuthor,SelectedRowIndex,2);
         model.setValueAt(newGenre,SelectedRowIndex,3);
+        int status = new BookBackend().updateBook(Integer.parseInt(ID), newName, newAuthor, newGenre);
+        if(status == 1)
+            JOptionPane.showMessageDialog(LibrarianAdd.this, "Updated successfully");
+        else
+            JOptionPane.showMessageDialog(LibrarianAdd.this, "Updation failed");
+            
       }
       catch(Exception e){
           JOptionPane.showMessageDialog(LibrarianAdd.this,"No Row Selected"+e.getMessage());
@@ -295,16 +305,13 @@ public class LibrarianAdd extends javax.swing.JFrame {
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         // TODO add your handling code here:
-      DefaultTableModel model= (DefaultTableModel) tblBooks.getModel();
+        DefaultTableModel model= (DefaultTableModel) tblBooks.getModel();
         //get selected row index
-        try{
         int SelectedRowIndex=tblBooks.getSelectedRow();
-        model.removeRow(SelectedRowIndex);
-        }
-        catch(Exception ex)
-        {
-            JOptionPane.showMessageDialog(null,ex);
-        }
+        if(SelectedRowIndex == -1)
+            JOptionPane.showMessageDialog(LibrarianAdd.this, "Select a row to delete");
+        else
+            model.removeRow(SelectedRowIndex);
         
     }//GEN-LAST:event_btnRemoveActionPerformed
 

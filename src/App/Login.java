@@ -5,6 +5,7 @@
 package App;
 
 import Backend.PasswordChecker;
+import Backend.FineBackend;
 import javax.swing.JOptionPane;
 import java.awt.Cursor;
 
@@ -19,6 +20,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        new FineBackend().refreshFines();
     }
 
     /**

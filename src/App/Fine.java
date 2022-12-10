@@ -6,9 +6,10 @@ package App;
 
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
-import Backend.FineBackend;
+import Backend.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 /**
  *
  * @author lenovo
@@ -176,23 +177,42 @@ public class Fine extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean verifyExpiryDate(){
+        Date today = new Date();
+        Date exp = dtcExpiryDate.getDate();
+        if(exp.after(today))
+            return true;
+        return false;
+    }
+    
     private void btnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayActionPerformed
         
         if(btngpModeofTransaction.getSelection() == null)
             JOptionPane.showMessageDialog(Fine.this, "Select a mode of transaction");
         else if(txtCardNumber.getText().trim().isEmpty())
             JOptionPane.showMessageDialog(Fine.this, "Enter a valid card number");
-        else if(txtCvv.getText().trim().isEmpty())
-            JOptionPane.showMessageDialog(Fine.this, "Enter CVV");
+        else if(txtCvv.getText().trim().isEmpty() || txtCvv.getText().length() != 3)
+            JOptionPane.showMessageDialog(Fine.this, "Enter a valid CVV");
         else if(dtcExpiryDate.getDate() == null){
             JOptionPane.showMessageDialog(Fine.this, "Enter expiry date");
+        }
+        else if(verifyExpiryDate() == false){
+            JOptionPane.showMessageDialog(Fine.this, "Card has expired");
         }
         else{
             LocalDate today = LocalDate.now();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String date = today.format(dtf);
+            FineBackend fb = new FineBackend();
             //System.out.println(date);
-            new FineBackend().addFine(customerId, fineAmt, date);
+            fb.addFine(customerId, fineAmt, date);
+            fb.removeFine(customerId);
+            txtCardNumber.setText("");
+            txtCvv.setText("");
+            btngpModeofTransaction.clearSelection();
+            txtFineAmt.setText("");
+            CustomerDashboard.currentCustomer.fine=0;
+            new BookBackend().updateBorrow(customerId);
             JOptionPane.showMessageDialog(Fine.this, "Payment Successful");
         }
     }//GEN-LAST:event_btnPayActionPerformed
