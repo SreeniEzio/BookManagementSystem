@@ -239,17 +239,32 @@ public class LibrarianAdd extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         DefaultTableModel model = (DefaultTableModel)tblBooks.getModel();
+        if(txtName.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(LibrarianAdd.this, "Enter book name");
+            txtName.grabFocus();
+            return;
+        }
+        if(txtAuthor.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(LibrarianAdd.this, "Enter Author name");
+            txtAuthor.grabFocus();
+            return;
+        }
+        if(txtGenre.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(LibrarianAdd.this, "Enter the genre");
+            txtGenre.grabFocus();
+            return;
+        }
         model.addRow(new Object[]{
             tblBooks.getRowCount()+1,
             txtName.getText(),
             txtAuthor.getText(),
             txtGenre.getText()
         });
+        int status = new BookBackend().addBook(txtName.getText(), txtAuthor.getText(), txtGenre.getText());
         txtAuthor.setText("");
         txtGenre.setText("");
         //txtID.setText("");
         txtName.setText("");
-        int status = new BookBackend().addBook(txtName.getText(), txtAuthor.getText(), txtGenre.getText());
         if(status == 0){
             JOptionPane.showMessageDialog(LibrarianAdd.this, "Failed to add new book");
         }else{

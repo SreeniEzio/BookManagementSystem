@@ -69,6 +69,7 @@ public class BookBackend {
         try{
             conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
             Statement st = conn.createStatement();
+            System.out.println(query);
             st.execute(query);
             conn.close();
             st.close();

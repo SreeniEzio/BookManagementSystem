@@ -20,6 +20,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        
         new FineBackend().refreshFines();
     }
 
@@ -45,6 +46,7 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Book Management System");
+        setMinimumSize(new java.awt.Dimension(640, 480));
 
         lblLogin.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblLogin.setText("Login");
