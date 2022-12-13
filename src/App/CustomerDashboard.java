@@ -4,10 +4,6 @@
  */
 package App;
 import Backend.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -79,11 +75,12 @@ public class CustomerDashboard extends javax.swing.JFrame {
         lblBorrowedBooks = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBorrowedBooks = new javax.swing.JTable();
-        btnBorrow = new javax.swing.JButton();
         btnPayFine = new javax.swing.JButton();
         lblFine = new javax.swing.JLabel();
         txtFine = new javax.swing.JTextField();
-        btnReturn = new javax.swing.JButton();
+        btnSearchTitlee = new javax.swing.JButton();
+        btnSearchAuthor = new javax.swing.JButton();
+        btnSearchID = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard");
@@ -93,10 +90,11 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
 
         lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
+        btnLogout.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         btnLogout.setText("Logout");
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +102,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
+        btnEditProfile.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         btnEditProfile.setText("Edit Profile");
         btnEditProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,6 +110,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
+        btnChangePass.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         btnChangePass.setText("Change Password");
         btnChangePass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,11 +125,11 @@ public class CustomerDashboard extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 457, Short.MAX_VALUE)
                 .addComponent(btnChangePass)
-                .addGap(18, 18, 18)
+                .addGap(35, 35, 35)
                 .addComponent(btnEditProfile)
-                .addGap(18, 18, 18)
+                .addGap(33, 33, 33)
                 .addComponent(btnLogout)
                 .addGap(27, 27, 27))
         );
@@ -140,7 +140,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addComponent(lblWelcome)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLogout)
                     .addComponent(btnEditProfile)
@@ -148,9 +148,10 @@ public class CustomerDashboard extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        lblBorrowedBooks.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblBorrowedBooks.setFont(new java.awt.Font("Verdana", 1, 48)); // NOI18N
         lblBorrowedBooks.setText("Borrowed Books");
 
+        tblBorrowedBooks.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         tblBorrowedBooks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -182,13 +183,7 @@ public class CustomerDashboard extends javax.swing.JFrame {
             tblBorrowedBooks.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        btnBorrow.setText("Borrow Book");
-        btnBorrow.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrowActionPerformed(evt);
-            }
-        });
-
+        btnPayFine.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         btnPayFine.setText("Pay Fine");
         btnPayFine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,16 +191,34 @@ public class CustomerDashboard extends javax.swing.JFrame {
             }
         });
 
-        lblFine.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblFine.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         lblFine.setText("Fine Incurred: ");
 
         txtFine.setEditable(false);
+        txtFine.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         txtFine.setText("Rs. 0");
 
-        btnReturn.setText("Return Book");
-        btnReturn.addActionListener(new java.awt.event.ActionListener() {
+        btnSearchTitlee.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
+        btnSearchTitlee.setText("Search Book by Title");
+        btnSearchTitlee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReturnActionPerformed(evt);
+                btnSearchTitleeActionPerformed(evt);
+            }
+        });
+
+        btnSearchAuthor.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
+        btnSearchAuthor.setText("Search Book by Author");
+        btnSearchAuthor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchAuthorActionPerformed(evt);
+            }
+        });
+
+        btnSearchID.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
+        btnSearchID.setText("Search Book by ID");
+        btnSearchID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchIDActionPerformed(evt);
             }
         });
 
@@ -213,50 +226,57 @@ public class CustomerDashboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblBorrowedBooks, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblFine, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFine, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(84, 84, 84))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(125, 125, 125)
-                .addComponent(btnBorrow)
-                .addGap(63, 63, 63)
-                .addComponent(btnReturn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnPayFine)
-                .addGap(120, 120, 120))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblBorrowedBooks, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(390, 390, 390))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 715, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(268, 268, 268))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnSearchID)
+                        .addGap(59, 59, 59)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblFine)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnSearchAuthor)
+                                .addGap(74, 74, 74)
+                                .addComponent(btnSearchTitlee)))
+                        .addGap(73, 73, 73)
+                        .addComponent(btnPayFine)
+                        .addGap(101, 101, 101))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(766, 766, 766)
+                        .addComponent(txtFine, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
+                .addGap(25, 25, 25)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
+                .addGap(18, 18, 18)
                 .addComponent(lblBorrowedBooks)
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46)
+                .addGap(48, 48, 48)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtFine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFine))
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFine)
-                    .addComponent(txtFine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBorrow)
                     .addComponent(btnPayFine)
-                    .addComponent(btnReturn))
-                .addGap(76, 76, 76))
+                    .addComponent(btnSearchTitlee)
+                    .addComponent(btnSearchAuthor)
+                    .addComponent(btnSearchID))
+                .addGap(67, 67, 67))
         );
 
         pack();
@@ -288,27 +308,24 @@ public class CustomerDashboard extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnPayFineActionPerformed
 
-    private void btnBorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrowActionPerformed
-        if(currentCustomer.fine > 0){
-            JOptionPane.showMessageDialog(CustomerDashboard.this, "You can't borrow books until you pay your fine");
-            return;
-        }
-        new CustomerBorrow().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_btnBorrowActionPerformed
-
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         tblBorrowedBooks.clearSelection();
     }//GEN-LAST:event_formMouseClicked
 
-    private void btnReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnActionPerformed
-        if(books.size() == 0){
-            JOptionPane.showMessageDialog(CustomerDashboard.this, "No book to return");
-            return;
-        }
-        new CustomerReturn().setVisible(true);
+    private void btnSearchTitleeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchTitleeActionPerformed
+        new ViewBookByTitle().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnReturnActionPerformed
+    }//GEN-LAST:event_btnSearchTitleeActionPerformed
+
+    private void btnSearchIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchIDActionPerformed
+        new ViewBookByID().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnSearchIDActionPerformed
+
+    private void btnSearchAuthorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAuthorActionPerformed
+        new ViewBookByAuthor().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnSearchAuthorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -346,12 +363,13 @@ public class CustomerDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBorrow;
     private javax.swing.JButton btnChangePass;
     private javax.swing.JButton btnEditProfile;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnPayFine;
-    private javax.swing.JButton btnReturn;
+    private javax.swing.JButton btnSearchAuthor;
+    private javax.swing.JButton btnSearchID;
+    private javax.swing.JButton btnSearchTitlee;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBorrowedBooks;

@@ -80,7 +80,7 @@ public class BookBackend {
         }
     }
     
-    public ArrayList<Object[]> retrieveAvailableBooks(int customerId){
+    public ArrayList<Object[]> retrieveAvailableBooks(){
         Connection conn = null;
         ArrayList<Object[]> result = new ArrayList<Object[]>();
         try{
@@ -197,5 +197,82 @@ public class BookBackend {
             e.printStackTrace();
         }
         return 0;
+    }
+    
+    public ArrayList<Object[]> retrieveById(int id){
+        Connection conn = null;
+        ArrayList<Object[]> result = new ArrayList<Object[]>();
+        try{
+            conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("select * from bookCollection where id=" + id + ";");
+            while(rs.next()){
+                result.add(new Object[]{
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getInt(5),
+                    rs.getString(6)
+                });
+                System.out.println("borrowed " + rs.getInt(5));
+            }
+            
+            conn.close();
+            st.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+    
+    public ArrayList<Object[]> retrieveByTitle(String name){
+        Connection conn = null;
+        ArrayList<Object[]> result = new ArrayList<Object[]>();
+        try{
+            conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("select * from bookCollection where name=\"" + name + "\";");
+            while(rs.next()){
+                result.add(new Object[]{
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getInt(5),
+                    rs.getString(6)
+                });
+            }
+            conn.close();
+            st.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+    
+    public ArrayList<Object[]> retrieveByAuthor(String author){
+        Connection conn = null;
+        ArrayList<Object[]> result = new ArrayList<Object[]>();
+        try{
+            conn = DriverManager.getConnection("jdbc:sqlite:data/library.db");
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("select * from bookCollection where author=\"" + author + "\";");
+            while(rs.next()){
+                result.add(new Object[]{
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4),
+                    rs.getInt(5),
+                    rs.getString(6)
+                });
+            }
+            conn.close();
+            st.close();
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        return result;
     }
 }

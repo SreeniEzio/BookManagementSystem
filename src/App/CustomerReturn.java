@@ -4,10 +4,10 @@
  */
 package App;
 
-import static App.CustomerDashboard.currentCustomer;
+//import static App.CustomerDashboard.currentCustomer;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import Backend.BookBackend;
+import Backend.*;
 import java.util.ArrayList;
 /**
  *
@@ -18,11 +18,11 @@ public class CustomerReturn extends javax.swing.JFrame {
     /**
      * Creates new form CustomerReturn
      */
+    Customer currentCustomer = null;
     DefaultTableModel model;
     public CustomerReturn() {
         initComponents();
         model = (DefaultTableModel) tblBooks.getModel();
-        fillTable();
     }
     
     private void fillTable(){
@@ -48,14 +48,18 @@ public class CustomerReturn extends javax.swing.JFrame {
         tblBooks = new javax.swing.JTable();
         btnReturnBook = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        lblCustomer = new javax.swing.JLabel();
+        txtCustomer = new javax.swing.JTextField();
+        btnGetBorrowedBooks = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Return Book");
 
-        lblBorrowedBk.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblBorrowedBk.setFont(new java.awt.Font("Verdana", 1, 48)); // NOI18N
         lblBorrowedBk.setText("Borrowed Books");
 
         tblBooks.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        tblBooks.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         tblBooks.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -68,7 +72,7 @@ public class CustomerReturn extends javax.swing.JFrame {
         tblBooks.setShowGrid(true);
         jScrollPane1.setViewportView(tblBooks);
 
-        btnReturnBook.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnReturnBook.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         btnReturnBook.setText("Return Book");
         btnReturnBook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -76,10 +80,24 @@ public class CustomerReturn extends javax.swing.JFrame {
             }
         });
 
+        btnBack.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         btnBack.setText("Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
+            }
+        });
+
+        lblCustomer.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
+        lblCustomer.setText("Enter Customer Name:");
+
+        txtCustomer.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+
+        btnGetBorrowedBooks.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        btnGetBorrowedBooks.setText("Get Borrowed Books");
+        btnGetBorrowedBooks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGetBorrowedBooksActionPerformed(evt);
             }
         });
 
@@ -89,32 +107,50 @@ public class CustomerReturn extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(65, 65, 65)
-                .addComponent(btnBack)
-                .addGap(108, 108, 108)
-                .addComponent(lblBorrowedBk, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(92, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnReturnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(248, 248, 248))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtCustomer)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnGetBorrowedBooks)
+                                .addGap(28, 28, 28)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(82, 82, 82))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnReturnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnBack)
+                                .addGap(337, 337, 337)
+                                .addComponent(lblBorrowedBk, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(329, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblBorrowedBk)
-                    .addComponent(btnBack))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(btnBack))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(lblBorrowedBk)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(lblCustomer)
+                        .addGap(32, 32, 32)
+                        .addComponent(txtCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
+                        .addComponent(btnGetBorrowedBooks)))
+                .addGap(34, 34, 34)
                 .addComponent(btnReturnBook)
-                .addGap(53, 53, 53))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 
         pack();
@@ -129,7 +165,7 @@ public class CustomerReturn extends javax.swing.JFrame {
             int status = new Backend.BookBackend().returnBook(bookId);
             model.removeRow(SelectedRowIndex);
             if(status == 1)
-                JOptionPane.showMessageDialog(CustomerReturn.this,"Borrowed Returned Successfully");
+                JOptionPane.showMessageDialog(CustomerReturn.this,"Book Returned Successfully");
             
         }
         catch(Exception ex)
@@ -139,9 +175,21 @@ public class CustomerReturn extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReturnBookActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        new CustomerDashboard("").setVisible(true);
+        new LibrarianDashboard("").setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnGetBorrowedBooksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetBorrowedBooksActionPerformed
+        if(txtCustomer.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(CustomerReturn.this, "Enter customer name");
+            txtCustomer.setText("");
+            txtCustomer.grabFocus();
+            return;
+        }
+        
+        currentCustomer = new PasswordChecker().retrieveCustomer(txtCustomer.getText().trim()).get(0);
+        fillTable();
+    }//GEN-LAST:event_btnGetBorrowedBooksActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,9 +228,12 @@ public class CustomerReturn extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnGetBorrowedBooks;
     private javax.swing.JButton btnReturnBook;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBorrowedBk;
+    private javax.swing.JLabel lblCustomer;
     private javax.swing.JTable tblBooks;
+    private javax.swing.JTextField txtCustomer;
     // End of variables declaration//GEN-END:variables
 }

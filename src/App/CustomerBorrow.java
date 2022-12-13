@@ -4,7 +4,7 @@
  */
 package App;
 
-import static App.CustomerDashboard.currentCustomer;
+//import static App.CustomerDashboard.currentCustomer;
 import Backend.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -19,6 +19,7 @@ public class CustomerBorrow extends javax.swing.JFrame {
     /**
      * Creates new form CustomerBorrow
      */
+    Customer currentCustomer = null;
     DefaultTableModel model;
     public CustomerBorrow() {
         initComponents();
@@ -27,7 +28,7 @@ public class CustomerBorrow extends javax.swing.JFrame {
     }
     
     private void fillTable(){
-        ArrayList<Object[]> books = new BookBackend().retrieveAvailableBooks(currentCustomer.customerId);
+        ArrayList<Object[]> books = new BookBackend().retrieveAvailableBooks();
         
         for(Object[] book: books){
             model.insertRow(tblBooks.getRowCount(), new Object[]{
@@ -50,6 +51,8 @@ public class CustomerBorrow extends javax.swing.JFrame {
         btnBorrowBook = new javax.swing.JButton();
         lblBorrowedBk = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
+        lblCustomerName = new javax.swing.JLabel();
+        txtCustomerName = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,7 +69,7 @@ public class CustomerBorrow extends javax.swing.JFrame {
         tblBooks.setShowGrid(true);
         jScrollPane1.setViewportView(tblBooks);
 
-        btnBorrowBook.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBorrowBook.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         btnBorrowBook.setText("Borrow Book");
         btnBorrowBook.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -74,9 +77,10 @@ public class CustomerBorrow extends javax.swing.JFrame {
             }
         });
 
-        lblBorrowedBk.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        lblBorrowedBk.setFont(new java.awt.Font("Verdana", 1, 48)); // NOI18N
         lblBorrowedBk.setText("Available Books");
 
+        btnBack.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
         btnBack.setText("Back");
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,38 +88,54 @@ public class CustomerBorrow extends javax.swing.JFrame {
             }
         });
 
+        lblCustomerName.setFont(new java.awt.Font("Verdana", 0, 24)); // NOI18N
+        lblCustomerName.setText("Enter Customer Name: ");
+
+        txtCustomerName.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(81, 81, 81)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
                         .addComponent(btnBack)
-                        .addGap(113, 113, 113)
-                        .addComponent(lblBorrowedBk, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(253, 253, 253)
-                        .addComponent(btnBorrowBook, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(161, 161, 161)
+                        .addComponent(lblBorrowedBk, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtCustomerName, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblCustomerName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(294, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 92, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(92, 92, 92))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBorrowBook, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(422, 422, 422))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
+                .addGap(87, 87, 87)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblBorrowedBk)
                     .addComponent(btnBack))
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(lblCustomerName)
+                        .addGap(33, 33, 33)
+                        .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                 .addComponent(btnBorrowBook)
-                .addGap(42, 42, 42))
+                .addGap(57, 57, 57))
         );
 
         pack();
@@ -126,6 +146,17 @@ public class CustomerBorrow extends javax.swing.JFrame {
         // TODO add your handling code here:
         DefaultTableModel model= (DefaultTableModel) tblBooks.getModel();
         //get selected row index
+        if(txtCustomerName.getText().trim().isEmpty()){
+            JOptionPane.showMessageDialog(CustomerBorrow.this, "Enter the customer name");
+            txtCustomerName.setText("");
+            txtCustomerName.grabFocus();
+            return;
+        }
+        if(tblBooks.getSelectedRow() == -1){
+            JOptionPane.showMessageDialog(CustomerBorrow.this, "Select a book from table");
+            return;
+        }
+        currentCustomer = new PasswordChecker().retrieveCustomer(txtCustomerName.getText().trim()).get(0);
         try{
             int SelectedRowIndex=tblBooks.getSelectedRow();
             int idCol = model.findColumn("BookID");
@@ -144,7 +175,7 @@ public class CustomerBorrow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBorrowBookActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        new CustomerDashboard("").setVisible(true);
+        new LibrarianDashboard("").setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
@@ -188,6 +219,8 @@ public class CustomerBorrow extends javax.swing.JFrame {
     private javax.swing.JButton btnBorrowBook;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBorrowedBk;
+    private javax.swing.JLabel lblCustomerName;
     private javax.swing.JTable tblBooks;
+    private javax.swing.JTextField txtCustomerName;
     // End of variables declaration//GEN-END:variables
 }
